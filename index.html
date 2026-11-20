@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zahnradgetriebe – Technik Klasse 8</title>
+<style>
+:root{--bg:#f4f6f9;--card:#fff;--tx:#1b2430;--mut:#5b6777;--ac:#d9480f;--bl:#1c7ed6;--ok:#2b8a3e;--bad:#c92a2a;--ln:#d5dbe3;--g1:#fd7e14;--g2:#4dabf7;--g3:#94d82d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12161c;--card:#1d242d;--tx:#e8edf3;--mut:#9aa7b6;--ln:#34404d;--ok:#69db7c;--bad:#ff8787}}
+:root[data-theme="dark"]{--bg:#12161c;--card:#1d242d;--tx:#e8edf3;--mut:#9aa7b6;--ln:#34404d;--ok:#69db7c;--bad:#ff8787}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;max-width:640px;margin-inline:auto;padding:12px}
+h1{font-size:1.3rem;margin:4px 0 2px}.sub{color:var(--mut);margin:0 0 10px;font-size:.9rem}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:12px;margin-bottom:12px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px}
+.tabs button{flex:none;border:1px solid var(--ln);background:var(--card);color:var(--tx);border-radius:20px;padding:8px 13px;font:inherit;font-size:.9rem;cursor:pointer}
+.tabs button.on{background:var(--ac);border-color:var(--ac);color:#fff}
+canvas{width:100%;height:300px;display:block;touch-action:none;border-radius:10px;background:var(--bg)}
+.info{font-size:.92rem;margin:8px 0 0}.hint{color:var(--mut);font-size:.82rem;margin:4px 0 0}
+.row{display:flex;align-items:center;gap:10px;margin:8px 0}.row label{flex:0 0 46%;font-size:.88rem}.row input[type=range]{flex:1;min-width:0}.row b{width:2.2em;text-align:right}
+.btns{display:flex;gap:8px;margin-top:6px}
+button.b{flex:1;border:0;border-radius:10px;padding:10px;font:inherit;background:var(--bl);color:#fff;cursor:pointer}
+button.b.alt{background:var(--ln);color:var(--tx)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.box{border:1px solid var(--ln);border-radius:10px;padding:8px}.box small{color:var(--mut);display:block;font-size:.76rem}.box strong{font-size:1.05rem}
+h2{font-size:1.05rem;margin:0 0 8px}.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:10px;border:1px solid var(--ln);background:var(--card);color:var(--tx);border-radius:10px;font:inherit;cursor:pointer}
+input[type=text]{width:100%;padding:10px;border:1px solid var(--ln);border-radius:10px;font:inherit;background:var(--bg);color:var(--tx)}
+.fb{margin-top:8px;padding:10px;border-radius:10px;font-size:.92rem}.fb.ok{border:1px solid var(--ok);color:var(--ok)}.fb.no{border:1px solid var(--bad);color:var(--bad)}.fb span{color:var(--tx)}
+.seg{display:flex;gap:6px;margin-bottom:10px}.seg button{flex:1;padding:11px;border:1px solid var(--ln);background:var(--card);color:var(--tx);border-radius:12px;font:inherit;font-weight:600;cursor:pointer}.seg button.on{background:var(--bl);border-color:var(--bl);color:#fff}
+#ro{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.box{background:var(--card)}.box strong{font-size:1.25rem;display:block}.box em{font-style:normal;color:var(--mut);font-size:.76rem}
+details{margin-top:10px;border-top:1px solid var(--ln);padding-top:8px}summary{cursor:pointer;font-weight:600;font-size:.92rem}
+.btns.big .b{padding:13px;font-size:1rem}.qn{color:var(--mut);font-size:.82rem}.q{font-size:1.1rem;margin:4px 0 8px}.given{background:var(--bg);border-radius:10px;padding:8px 10px;margin-bottom:10px;font-size:.95rem}
+.opt.good{border-color:var(--ok);border-width:2px}.opt.bad{border-color:var(--bad);border-width:2px}.weg{margin-top:8px;padding:8px 10px;background:var(--bg);border-radius:10px;color:var(--tx)}.weg ol{margin:4px 0 0;padding-left:20px}
+.sc{font-size:.85rem;color:var(--mut);text-align:right}
+</style></head><body>
+<h1>⚙️ Zahnradgetriebe</h1>
+<p class="sub">Technik · Maschinentechnik · Klasse 8 – Ausprobieren, beobachten, berechnen</p>
+<div class="seg"><button id="m1" class="on">⚙️ Ausprobieren</button><button id="m2">📝 Aufgaben</button></div>
+<div class="tabs" id="tabs"></div>
+<div id="v1">
+<div class="card"><canvas id="cv"></canvas>
+<div class="btns big"><button class="b" id="run">⏸ Stopp</button><button class="b alt" id="dir">↻ Rechtslauf</button></div>
+<p class="hint">👆 Dreh das orange Antriebsrad mit dem Finger.</p></div>
+<div id="ro"></div>
+<div class="card"><h2>Zähnezahlen einstellen</h2><div id="sl"></div>
+<details><summary>Drehzahl einstellen</summary><div class="row"><label>Antrieb n₁ (U/min)</label><input type="range" id="n1" min="5" max="60" value="20"><b id="n1v">20</b></div></details>
+<details><summary>Erklärung</summary><p class="info" id="info"></p></details></div>
+</div>
+<div id="v2" hidden><div class="card"><div class="sc" id="sc"></div><div id="qb"></div><div id="fb"></div><div class="btns"><button class="b" id="nx" hidden>Nächste Aufgabe ▶</button></div></div></div>
+<script>
+const $=s=>document.querySelector(s),cv=$('#cv'),ctx=cv.getContext('2d');
+const TY={
+stirn:{n:'Stirnradgetriebe',p:[['z1','Antriebsrad z₁',8,40,12],['z2','Abtriebsrad z₂',8,40,24]],same:false,out:'Abtriebsrad',info:'Räder, deren Stirnseiten ineinandergreifen. Die Drehrichtung kehrt sich um. i = z₂ : z₁'},
+schnecke:{n:'Schneckenradgetriebe',p:[['g','Gangzahl der Schnecke',1,4,1],['z2','Schneckenrad z₂',10,40,20]],same:null,out:'Schneckenrad',info:'Die Schnecke ist immer der Antrieb und wirkt wie ein Zahnrad mit nur einem Zahn (Gangzahl 1). Sehr große Übersetzung ins Langsame in einer Stufe. i = z₂ : Gangzahl'},
+kegel:{n:'Kegelradgetriebe',p:[['z1','Antriebsrad z₁',10,30,16],['z2','Abtriebsrad z₂',10,30,24]],same:null,out:'Abtriebsrad',info:'Kegelförmige Zahnräder lenken die Drehbewegung um 90° um (Schemadarstellung: Abtrieb von der Seite gesehen). i = z₂ : z₁'},
+zahnst:{n:'Zahnstangengetriebe',p:[['z1','Ritzel z₁',8,24,14]],same:null,out:'Zahnstange',info:'Drehbewegung wird in eine geradlinige Bewegung umgewandelt. Die Zahnstange wirkt wie ein abgewickeltes Zahnrad. Weg pro Umdrehung s = z · π · m (hier m = 2 mm).'},
+zug:{n:'Zugmittelgetriebe',p:[['z1','Antriebsrad z₁',8,30,12],['z2','Abtriebsrad z₂',8,40,24]],same:true,out:'Abtriebsrad',info:'Die Räder berühren sich nicht, sondern sind durch ein Zugmittel (Kette, Riemen) verbunden. Beide drehen in die gleiche Richtung. i = z₂ : z₁'},
+schub:{n:'Schubkurbelgetriebe',p:[['r','Kurbelradius r (mm)',15,45,30],['l','Pleuellänge l (mm)',100,200,140]],same:null,out:'Schieber',info:'Wandelt eine Drehbewegung in eine Hin- und Herbewegung um (und umgekehrt). Hub s = 2 · r.'}};
+let T='stirn',S={},A=0,run=true,sgn=1,n1=20,hit=null;
+const f2=x=>(+x.toFixed(2)).toString().replace('.',','),css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function tabs(){$('#tabs').innerHTML=Object.entries(TY).map(([k,t])=>`<button data-k="${k}" class="${k==T?'on':''}">${t.n}</button>`).join('');
+$('#tabs').onclick=e=>{const k=e.target.dataset.k;if(k){T=k;A=0;setup()}}}
+function setup(){const t=TY[T];tabs();$('#info').textContent=t.info;S={};
+$('#sl').innerHTML=t.p.map(p=>{S[p[0]]=p[4];return `<div class="row"><label>${p[1]}</label><input type="range" data-k="${p[0]}" min="${p[2]}" max="${p[3]}" step="${p[5]||1}" value="${p[4]}"><b id="v_${p[0]}">${p[4]}</b></div>`}).join('');
+document.querySelectorAll('#sl input').forEach(r=>r.oninput=()=>{S[r.dataset.k]=+r.value;$('#v_'+r.dataset.k).textContent=r.value;ro()});
+ro();newQ()}
+function ro(){const t=TY[T],bx=(a,b,c='')=>`<div class="box"><small>${a}</small><strong>${b}</strong><em>${c}</em></div>`,cw='↻ rechts',ccw='↺ links';let h;
+if(T=='zahnst'){const w=S.z1*Math.PI*2;h=bx('Weg pro Umdrehung',f2(w)+' mm')+bx('Geschwindigkeit',f2(n1/60*w)+' mm/s')+bx('Zahnstange',sgn>0?'← links':'→ rechts')}
+else if(T=='schub')h=bx('Hub s = 2·r',2*S.r+' mm')+bx('Doppelhübe',n1+' pro min','1 Kurbelumdrehung = 1 Doppelhub')+bx('Pleuellänge',S.l+' mm')
+else{const r=R(S),i=r[0]/r[1],cur=sgn>0?cw:ccw,opp=sgn>0?ccw:cw;h=bx('Übersetzung i',r[0]+':'+r[1],i>1?'ins Langsame':i<1?'ins Schnelle':'gleich schnell')+bx('Abtrieb n₂',f2(n1/i)+' U/min','Antrieb: '+n1+' U/min')+bx('Drehrichtung Abtrieb',t.same===null?'je nach Blickwinkel':t.same?cur:opp,'Antrieb: '+cur)}
+$('#ro').innerHTML=h}
+function poly(x,y,z,m,th,s){const rp=z*m/2,pa=2*Math.PI/z;for(let k=0;k<z;k++)[[-.3,-1],[-.18,1],[.18,1],[.3,-1]].forEach(([f,u],j)=>{const r=rp+s*u*.55*m,b=th+k*pa+f*pa,px=x+r*Math.cos(b),py=y+r*Math.sin(b);(k==0&&j==0)?ctx.moveTo(px,py):ctx.lineTo(px,py)});ctx.closePath()}
+function gear(x,y,z,m,th,col,drive){const rp=z*m/2;ctx.beginPath();poly(x,y,z,m,th,1);ctx.fillStyle=col;ctx.globalAlpha=.9;ctx.fill();ctx.globalAlpha=1;ctx.lineWidth=drive?3:1.5;ctx.strokeStyle=drive?css('--ac'):css('--tx');ctx.stroke();
+ctx.beginPath();ctx.arc(x+.62*rp*Math.cos(th),y+.62*rp*Math.sin(th),Math.max(3,m*.4),0,7);ctx.fillStyle='#c92a2a';ctx.fill();ctx.beginPath();ctx.arc(x,y,Math.max(2.5,m*.35),0,7);ctx.fillStyle=css('--tx');ctx.fill();
+if(drive)hit={t:'c',x,y,r:Math.max(rp+m,28)}}
+const mesh=(al,t1,z1,z2)=>al+Math.PI-Math.PI/z2+(z1/z2)*(al-t1);
+function draw(){const dpr=devicePixelRatio||1,W=cv.clientWidth,H=300;if(cv.width!=W*dpr){cv.width=W*dpr;cv.height=H*dpr}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+const c1=css('--g1'),c2=css('--g2'),c3=css('--g3'),tx=css('--tx'),mu=css('--mut');hit=null;const cy=H/2;
+if(T=='stirn'){const{z1,z2}=S,m=Math.min(14,(W-24)/(z1+z2+1.2),(H-20)/(Math.max(z1,z2)+1.2)),a=(z1+z2)*m/2,x1=(W-(z1*m/2+a+z2*m/2))/2+z1*m/2;
+gear(x1,cy,z1,m,A,c1,1);gear(x1+a,cy,z2,m,mesh(0,A,z1,z2),c2)}
+else if(T=='zahnst'){const z=S.z1,m=Math.min(12,(H-70)/(z+3)),r=z*m/2,cx=W/2,py=28+r,p=Math.PI*m,dl=-r*(A-Math.PI/2),yc=py+r;
+ctx.beginPath();let n0=Math.floor((-p-(cx+p/2+dl))/p);const xs=[];for(let n=n0;;n++){const x=cx+p*(.5+n)+dl;if(x>W+p)break;xs.push(x)}
+xs.forEach((x,j)=>{[[-.3,.55],[-.18,-.55],[.18,-.55],[.3,.55]].forEach(([f,u],k)=>{const X=x+f*p,Y=yc+u*m;(j==0&&k==0)?ctx.moveTo(X,Y):ctx.lineTo(X,Y)})});
+ctx.lineTo(W+p,yc+2.6*m);ctx.lineTo(-p,yc+2.6*m);ctx.closePath();ctx.fillStyle=c2;ctx.globalAlpha=.9;ctx.fill();ctx.globalAlpha=1;ctx.lineWidth=1.5;ctx.strokeStyle=tx;ctx.stroke();
+gear(cx,py,z,m,A,c1,1);ctx.fillStyle=tx;ctx.font='13px system-ui';ctx.fillText('Zahnstange',8,H-8)}
+else if(T=='kegel'){const{z1,z2}=S,m=Math.min(11,(H-24)/(Math.max(z1,z2)+1.5)),r1=z1*m/2,r2=z2*m/2,x1=W*.36,xb=x1+r1+m*.5,w=m*2.8,t2=-A*z1/z2;
+gear(x1,cy,z1,m,A,c1,1);ctx.fillStyle=c2;ctx.globalAlpha=.9;ctx.fillRect(xb,cy-r2,w,2*r2);ctx.globalAlpha=1;ctx.strokeStyle=tx;ctx.lineWidth=1.5;ctx.strokeRect(xb,cy-r2,w,2*r2);
+ctx.beginPath();ctx.moveTo(xb+w/2,cy-r2-10);ctx.lineTo(xb+w/2,cy+r2+10);ctx.setLineDash([5,4]);ctx.stroke();ctx.setLineDash([]);
+for(let k=0;k<z2;k++){const b=t2+2*Math.PI*k/z2;if(Math.cos(b)>0){const y=cy+r2*Math.sin(b);ctx.beginPath();ctx.moveTo(xb,y);ctx.lineTo(xb+w,y);ctx.strokeStyle=tx;ctx.lineWidth=1.2;ctx.stroke()}}
+ctx.fillStyle=tx;ctx.font='12px system-ui';ctx.fillText('Abtrieb (Seitenansicht)',Math.min(xb-20,W-150),H-6)}
+else if(T=='schnecke'){const{g,z2}=S,m=Math.min(10,(H-26)/(z2+3)),r2=z2*m/2,cx=W/2,y0=10+r2,rw=m*1.6,wy=y0+r2,t2=A*g/z2,px=Math.PI*m;
+gear(cx,y0,z2,m,t2,c2);const x0=W*.08,w=W*.84;ctx.fillStyle=c1;ctx.fillRect(x0,wy-rw,w,2*rw);ctx.save();ctx.beginPath();ctx.rect(x0,wy-rw,w,2*rw);ctx.clip();
+ctx.strokeStyle=tx;ctx.lineWidth=2;const sh=((-r2*t2)%px+px)%px;for(let x=x0-px*2+sh;x<x0+w+px;x+=px){ctx.beginPath();ctx.moveTo(x,wy-rw);ctx.lineTo(x+px*.35,wy+rw);ctx.stroke()}ctx.restore();
+ctx.strokeRect(x0,wy-rw,w,2*rw);hit={t:'b',x:x0,y:wy-rw,w,h:2*rw,k:-2/(g*m)};ctx.fillStyle=tx;ctx.font='12px system-ui';ctx.fillText('Schnecke (Antrieb) – hier ziehen',x0+4,Math.min(H-4,wy+rw+14))}
+else if(T=='zug'){const{z1,z2}=S,m=Math.min(12,(W-24)/(z1+z2+3.2),(H-24)/(Math.max(z1,z2)+1.2)),r1=z1*m/2,r2=z2*m/2,d=(z1+z2)*m/2+3*m,x1=(W-(r1+d+r2))/2+r1,x2=x1+d,be=Math.asin((r1-r2)/d),P=Math.PI;
+gear(x1,cy,z1,m,A,c1,1);gear(x2,cy,z2,m,A*z1/z2,c2);
+ctx.beginPath();ctx.moveTo(x1+r1*Math.sin(be),cy-r1*Math.cos(be));ctx.lineTo(x2+r2*Math.sin(be),cy-r2*Math.cos(be));ctx.arc(x2,cy,r2,-(P/2-be),P/2-be,false);ctx.lineTo(x1+r1*Math.sin(be),cy+r1*Math.cos(be));ctx.arc(x1,cy,r1,P/2-be,1.5*P+be,false);ctx.closePath();
+ctx.strokeStyle=tx;ctx.lineWidth=Math.max(4,m*.7);ctx.setLineDash([P*m*.6,P*m*.4]);ctx.lineDashOffset=-A*r1;ctx.stroke();ctx.setLineDash([]);ctx.lineDashOffset=0;
+ctx.font='12px system-ui';ctx.fillStyle=tx;ctx.fillText('Zugmittel (Kette/Riemen)',8,H-8)}
+else if(T=='schub'){const{r,l}=S,k=Math.min((W-70)/(2*r+l),2.2),R0=r*k,L0=l*k,cx=30+R0,px=cx+R0*Math.cos(A),py=cy+R0*Math.sin(A),sx=px+Math.sqrt(L0*L0-(py-cy)**2);
+ctx.strokeStyle=mu;ctx.lineWidth=2;[-18,18].forEach(o=>{ctx.beginPath();ctx.moveTo(cx,cy+o);ctx.lineTo(cx+R0+L0+30,cy+o);ctx.stroke()});
+[cx-R0+L0,cx+R0+L0].forEach(x=>{ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(x,cy-45);ctx.lineTo(x,cy+60);ctx.stroke();ctx.setLineDash([])});
+ctx.strokeStyle=tx;ctx.beginPath();ctx.moveTo(cx-R0+L0,cy+52);ctx.lineTo(cx+R0+L0,cy+52);ctx.stroke();ctx.fillStyle=tx;ctx.font='12px system-ui';ctx.fillText('Hub s = 2·r = '+2*r+' mm',cx-R0+L0-20,cy+72);
+ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(sx,cy);ctx.lineWidth=7;ctx.strokeStyle=mu;ctx.stroke();
+ctx.fillStyle=c2;ctx.fillRect(sx-18,cy-13,36,26);ctx.lineWidth=1.5;ctx.strokeStyle=tx;ctx.strokeRect(sx-18,cy-13,36,26);
+ctx.beginPath();ctx.arc(cx,cy,R0+14,0,7);ctx.fillStyle=c1;ctx.globalAlpha=.9;ctx.fill();ctx.globalAlpha=1;ctx.lineWidth=3;ctx.strokeStyle=css('--ac');ctx.stroke();
+ctx.beginPath();ctx.arc(px,py,6,0,7);ctx.fillStyle='#c92a2a';ctx.fill();ctx.beginPath();ctx.arc(cx,cy,4,0,7);ctx.fillStyle=tx;ctx.fill();hit={t:'c',x:cx,y:cy,r:R0+14};
+ctx.fillText('Pleuel',(px+sx)/2-14,cy-24)}
+}
+let last=0;function loop(t){const dt=Math.min(.05,(t-last)/1000||0);last=t;if(run&&!drag)A+=sgn*n1/60*2*Math.PI*dt;if(!$("#v1").hidden)draw();requestAnimationFrame(loop)}
+let drag=false,pa=0,px0=0;
+const pt=e=>{const r=cv.getBoundingClientRect();return[e.clientX-r.left,(e.clientY-r.top)*300/r.height]};
+cv.onpointerdown=e=>{if(!hit)return;const[x,y]=pt(e);if(hit.t=='c'&&Math.hypot(x-hit.x,y-hit.y)<=hit.r){drag=true;pa=Math.atan2(y-hit.y,x-hit.x)}else if(hit.t=='b'&&x>=hit.x&&x<=hit.x+hit.w&&y>=hit.y&&y<=hit.y+hit.h){drag=true;px0=x}if(drag)cv.setPointerCapture(e.pointerId)};
+cv.onpointermove=e=>{if(!drag)return;const[x,y]=pt(e);if(hit.t=='c'){const a=Math.atan2(y-hit.y,x-hit.x);let d=a-pa;if(d>Math.PI)d-=2*Math.PI;if(d<-Math.PI)d+=2*Math.PI;A+=d;pa=a}else{A+=(x-px0)*hit.k;px0=x}};
+cv.onpointerup=cv.onpointercancel=()=>drag=false;
+$('#n1').oninput=e=>{n1=+e.target.value;$('#n1v').textContent=n1;ro()};
+$('#run').onclick=()=>{run=!run;$('#run').textContent=run?'⏸ Stopp':'▶ Motor an'};
+$('#dir').onclick=()=>{sgn=-sgn;$('#dir').textContent=sgn>0?'↻ Rechtslauf':'↺ Linkslauf';ro()};
+/* Aufgaben */
+let Q=null,ok=0,all=0,done=false;const rnd=(a,b,s=1)=>a+s*Math.floor(Math.random()*((b-a)/s+1)),pick=a=>a[Math.floor(Math.random()*a.length)],gcd=(a,b)=>b?gcd(b,a%b):a;
+function R(s){const m={stirn:[s.z2,s.z1],kegel:[s.z2,s.z1],schnecke:[s.z2,s.g],zug:[s.z2,s.z1]}[T],g=gcd(m[0],m[1]);return[m[0]/g,m[1]/g,m[0],m[1],g]}
+function newQ(){const t=TY[T],s={},gen=()=>t.p.forEach(p=>s[p[0]]=rnd(p[2],p[3],p[5]||1)),n=pick([12,20,24,30,40,60]),L=[];gen();
+if(T=='zahnst'){L.push({k:'mc',q:'Das Ritzel dreht ↻ rechts herum. Wohin bewegt sich die Zahnstange (sie liegt unter dem Ritzel)?',o:['← nach links','→ nach rechts'],a:0,w:['Die Unterseite des rechtsdrehenden Ritzels bewegt sich nach links und nimmt die Zahnstange mit.']});
+const v=s.z1*Math.PI*2;L.push({k:'n',q:'Wie weit bewegt sich die Zahnstange bei einer Umdrehung des Ritzels? (in mm, π ≈ 3,14)',g:`Ritzel z = ${s.z1} Zähne, Modul m = 2 mm`,a:v,tol:1,sol:f2(v)+' mm',w:['Formel: s = z · π · m',`Einsetzen: s = ${s.z1} · 3,14 · 2 mm`,`Ergebnis: s ≈ ${f2(v)} mm`]})}
+else if(T=='schub'){const h=2*s.r;L.push({k:'n',q:'Wie groß ist der Hub des Schiebers (Weg zwischen den beiden Endlagen)? (in mm)',g:`Kurbelradius r = ${s.r} mm, Pleuellänge l = ${s.l} mm`,a:h,tol:.5,sol:h+' mm',w:['Formel: Hub s = 2 · r (die Pleuellänge spielt keine Rolle)',`Einsetzen: s = 2 · ${s.r} mm`,`Ergebnis: s = ${h} mm`]});
+L.push({k:'mc',q:'Wie viele Hin- und Herbewegungen (Doppelhübe) macht der Schieber bei einer Kurbelumdrehung?',o:['1','2','Eine halbe'],a:0,w:['Eine Umdrehung der Kurbel = einmal hin und einmal zurück = 1 Doppelhub.']});
+L.push({k:'mc',q:'Wie kannst du den Hub vergrößern?',o:['Größerer Kurbelradius','Längere Pleuelstange'],a:0,w:['Der Hub ist s = 2 · r. Nur der Kurbelradius verändert ihn.']})}
+else{let g=0;while(R(s)[0]==R(s)[1]&&g++<20)gen();const r=R(s),a=r[0],b=r[1],i=a/b,ins=i>1?'ins Langsame (i > 1)':'ins Schnelle (i < 1)',out=t.out=='Schneckenrad'?'das Schneckenrad':'das Abtriebsrad';
+const zt={stirn:`z₁ = ${s.z1} (Antrieb), z₂ = ${s.z2} (Abtrieb)`,kegel:`z₁ = ${s.z1} (Antrieb), z₂ = ${s.z2} (Abtrieb)`,schnecke:`Gangzahl = ${s.g} (Antrieb), Schneckenrad z₂ = ${s.z2}`,zug:`z₁ = ${s.z1} (Antrieb), z₂ = ${s.z2} (Abtrieb)`}[T],fm=T=='schnecke'?'i = n₁ : n₂ = z₂ : Gangzahl':'i = n₁ : n₂ = z₂ : z₁',kz=r[4]>1?`Kürzen (÷ ${r[4]}): i = ${a} : ${b}`:`Kürzen nicht möglich: i = ${a} : ${b}`;
+if(t.same!==null)L.push({k:'mc',q:`Das Antriebsrad dreht ↻ rechts herum (Uhrzeigersinn). Wie dreht ${out}?`,o:['↻ rechts herum','↺ links herum'],a:t.same?0:1,w:[t.same?'Beide Räder werden vom gleichen Zugmittel mitgenommen und drehen gleich.':'Bei Rädern im direkten Eingriff kehrt sich die Drehrichtung um.']});
+L.push({k:'r',q:'Berechne das Übersetzungsverhältnis i.',g:zt,a:[a,b],sol:`${a}:${b}`,w:['Formel: '+fm,`Einsetzen: i = ${r[2]} : ${r[3]}`,kz,`Ergebnis: i = ${a}:${b} → ${ins}`]});
+L.push({k:'mc',q:'Wie dreht der Abtrieb im Vergleich zum Antrieb?',g:zt+` · i = ${a}:${b}`,o:['langsamer','schneller'],a:i>1?0:1,w:[`i = ${a}:${b} ist ${i>1?'größer':'kleiner'} als 1:1.`,i>1?'Der Abtrieb dreht langsamer, dafür steigt das Drehmoment.':'Der Abtrieb dreht schneller, dafür sinkt das Drehmoment.']});
+const n2=n*b/a;L.push({k:'n',q:'Berechne die Drehzahl n₂ des Abtriebs (in U/min).',g:`i = ${a}:${b}, n₁ = ${n} U/min`,a:n2,tol:.1,sol:f2(n2)+' U/min',w:['Formel: n₂ = n₁ : i = n₁ · b / a (bei i = a:b)',`Einsetzen: n₂ = ${n} · ${b} / ${a}`,`Ergebnis: n₂ ≈ ${f2(n2)} U/min`]})}
+Q=pick(L);if(Q.k=='mc'){const ix=[...Q.o.keys()].sort(()=>Math.random()-.5);Q={...Q,o:ix.map(k=>Q.o[k]),a:ix.indexOf(Q.a)}}
+done=false;$('#fb').innerHTML='';$('#nx').hidden=true;
+$('#qb').innerHTML=`<div class="qn">Aufgabe ${all+1} · ${t.n}</div><p class="q">${Q.q}</p>`+(Q.g?`<div class="given"><b>Gegeben:</b> ${Q.g}</div>`:'')+(Q.k=='mc'?Q.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join(''):`<input type="text" id="ans" inputmode="${Q.k=='r'?'text':'decimal'}" placeholder="${Q.k=='r'?'z. B. 3:2 (gekürzt)':'Zahl eingeben'}"><div class="btns"><button class="b" id="chk">Prüfen</button></div>`);
+$('#qb').onclick=e=>{const j=e.target.dataset.j;if(j!==undefined&&!done){document.querySelectorAll('.opt').forEach((o,k)=>{o.disabled=true;if(k==Q.a)o.classList.add('good');else if(k==+j)o.classList.add('bad')});grade(+j==Q.a,'')}if(e.target.id=='chk')chk()};
+const a=$('#ans');if(a)a.onkeydown=e=>{if(e.key=='Enter')chk()};sc()}
+function chk(){if(done)return;let r,msg='';
+if(Q.k=='n'){const v=parseFloat($('#ans').value.replace(',','.'));if(isNaN(v))return;r=Math.abs(v-Q.a)<=Q.tol}
+else{const m=$('#ans').value.trim().match(/^(\d+(?:[.,]\d+)?)\s*[:\/]\s*(\d+(?:[.,]\d+)?)$/);if(!m){$('#fb').innerHTML='<div class="fb no">Bitte als Verhältnis eingeben, z. B. 3:2</div>';return}
+const x=+m[1].replace(',','.'),y=+m[2].replace(',','.');r=Math.abs(x/y-Q.a[0]/Q.a[1])<1e-6;if(r&&(x!=Q.a[0]||y!=Q.a[1]))msg=' Tipp: Kürze das Verhältnis noch vollständig.'}
+$('#ans').disabled=true;$('#chk').hidden=true;grade(r,msg)}
+function grade(r,msg){if(done)return;done=true;all++;if(r)ok++;
+$('#fb').innerHTML=`<div class="fb ${r?'ok':'no'}"><b>${r?'✅ Richtig!':'❌ Leider falsch.'}</b>${msg}${!r&&Q.sol?` Richtig wäre: <b>${Q.sol}</b>`:''}<div class="weg"><b>Rechenweg</b><ol>${Q.w.map(x=>`<li>${x}</li>`).join('')}</ol></div></div>`;$('#nx').hidden=false;sc()}
+const sc=()=>$('#sc').textContent=all?`Punktestand: ${ok} von ${all} richtig`:'';
+$('#nx').onclick=newQ;
+const mode=v=>{$('#v1').hidden=v!=1;$('#v2').hidden=v!=2;$('#m1').className=v==1?'on':'';$('#m2').className=v==2?'on':''};$('#m1').onclick=()=>mode(1);$('#m2').onclick=()=>mode(2);
+setup();requestAnimationFrame(loop);
+</script></body></html>
+
